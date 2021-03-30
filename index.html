@@ -159,20 +159,40 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2021/01/16/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/">几个简单的XSS小题目</a>
+      <a class="article-title" href="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/">几个简单的XSS小题目</a>
     </h1>
   
 
         
-        <a href="/2021/01/16/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/" class="archive-article-date">
-  	<time datetime="2021-01-16T09:34:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-16</time>
+        <a href="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/" class="archive-article-date">
+  	<time datetime="2021-03-30T09:34:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-03-30</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id><a href="#" class="headerlink" title></a></h1><h2 id="XSS-Cross-Site-Scripting"><a href="#XSS-Cross-Site-Scripting" class="headerlink" title="XSS (Cross Site Scripting)"></a>XSS (Cross Site Scripting)</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;先扯点题外话，抱歉这么久都没怎么打理这个博客，之前一直被学校的事情弄得焦头烂额，在明确自己又错过一个学期的情况后，倒也长舒一口气，专心实习搬砖，利用工作之余的时间学习更多的东西。<br>&nbsp;&nbsp;&nbsp;&nbsp;XSS的缩写其实是Cross Site Scripting，但是为了防止跟CSS Cascading Style Sheets混淆，就改成了XSS。什么是XSS呢？即是一种网站应用程序的安全漏洞攻击，它允许恶意用户将代码注入到网页上，其他用户在浏览的时候就会受到一些影响。我个人其实比较喜欢寻找有关XSS的漏洞，其实对我来说就是特别享受弹窗出现的那一刻，最直接的反馈，当然了，我也还在还在不断学习寻找XSS漏洞的很多方式，现在大部分网站的防火墙会很快的阻止你触发这个XSS漏洞，当你在输入”<script>alert(1)</script>“</p>
+        <h1 id><a href="#" class="headerlink" title></a></h1><h2 id="XSS-Cross-Site-Scripting"><a href="#XSS-Cross-Site-Scripting" class="headerlink" title="XSS (Cross Site Scripting)"></a>XSS (Cross Site Scripting)</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;先扯点题外话，抱歉这么久都没怎么打理这个博客，之前一直被学校的事情弄得焦头烂额，在明确自己又错过一个学期的情况后，倒也长舒一口气，专心实习搬砖，利用工作之余的时间学习更多的东西。<br>&nbsp;&nbsp;&nbsp;&nbsp;XSS的缩写其实是Cross Site Scripting，但是为了防止跟CSS Cascading Style Sheets混淆，就改成了XSS。什么是XSS呢？即是一种网站应用程序的安全漏洞攻击，它允许恶意用户将代码注入到网页上，其他用户在浏览的时候就会受到一些影响。我个人其实比较喜欢寻找有关XSS的漏洞，其实对我来说就是特别享受弹窗出现的那一刻，最直接的反馈，当然了，我也还在还在不断学习寻找XSS漏洞的很多方式，现在大部分网站的防火墙会很快的阻止你触发这个XSS漏洞，当你在输入像<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>,<code>&quot;&gt;&lt;img src onerror=alert(1)&gt;</code>时，网站都会自动过滤掉像&lt;&gt;,/ 这种符号，然后就切换到触发风控的页面当中。现在比较多的企业都将服务器部署在阿里云等云上，基本上都会触发风控，加上如今前端工程师在开发网页的时候也会将输入的内容进行过滤。<br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/waf1.jpg"><br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/waf2.jpg"></p>
+<p>话不多说，先完成几个比较简单的XSS题目。（靶场由蚁景网安学院提供）<br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/games.jpg"></p>
+<p>可以看到有不同的题目，对应的题目也算是提示和思路。</p>
+<p>先来到第一题：<br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game1.jpg"></p>
+<p>我们可以先直接在url最后添加<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>去看看有什么反应<br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game1-2.jpg"><br>可以看到我们输入的<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>被直接执行了，拿到这道题的flag。</p>
+<p>第二题：input标签闭合<br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game2-1.jpg"></p>
+<p>可以看到这次换了个形式让我们去测试XSS，在日常挖洞的情况中，基本上收集了各大公司的子域名之后，不同的子域名里面就存在着很多的搜索框，像XSS的测试方式之一就是见框就插入payload进行测试，当我们正常输入<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>的时候可以看到/和（）都被过滤掉了。<br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game2-2.jpg"></p>
+<p>这个时候就更换一下思路像题目说的那样去闭合掉input标签，先查看一下源代码，可以看到input标签内的value并没有被闭合掉<br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game2-3.jpg"></p>
+<p>我们尝试将它闭合一下<br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game2-4.jpg"></p>
+<p>可以看到闭合之后就触发了alert，拿到这道题的flag<br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game2-5.jpg"></p>
+<p>再看一下源代码更清晰一些<br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game2-6.jpg"></p>
+<p>第三题：单引号前后闭合与onclick的使用</p>
+<p>当我根据题目所提示的去闭合输入payload发现怎么闭合都是不行，然后查看了一下源代码以及url发现都被过滤掉了<br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game3-1.jpg"><br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game3-2.jpg"></p>
+<p>无论我怎么闭合都不行，换个思路试试直接闭合单引号并直接加上onclick事件的payload看看，这里需要注意输入完成后需要再打几个空格，最后再点击一下输入框就触发了。<br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game3-3.jpg"></p>
+<p>第四题：双引号前后闭合与onclick的使用</p>
+<p>其实思路和第三题差不多，就换成双引号去闭合就好了<br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game4-1.jpg"></p>
+<p>第五题：input标签的闭合与a标签的使用</p>
+<p><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game5-1.jpg"><br>当我以普通的方式闭合并且填写XSSpayload的时候，可以看到script标签内被过滤掉了，所以我们根据题目去换个思路填写利用别的标签事件去填写payload。<br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game5-2.jpg"></p>
+<p>如图所示，我们闭合之后再填写<code>&lt;a href=javascript:alert(1)&gt;</code>，再点击后面出现的链接框就能得到这道题的flag。<br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game5-3.jpg"></p>
+<p>今天先写这几个，我有时候真的很懒，扯一扯题外话，有些时候真的有点想放弃的想法，但是当你偶尔有反馈的时候，还是能让你不断坚持下去，生活中的很多事物都能让人泄气，一个搞不懂的知识点，一个怎么都想不出来的答案，或许那一瞬间没有反馈的时候可以停一停休息一下，或许回过头来问题就能解决了呢？加油，为了能够不犹豫地点一份四五十块以上的外卖而努力。</p>
+<p>（温馨提示：漏洞挖掘需要研读各大厂商的漏洞处理公告，切勿做越界行为，遵纪守法。）</p>
 
       
 
@@ -185,7 +205,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2021/01/16/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/">展开全文 >></a>
+          <a class="article-more-a" href="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/">展开全文 >></a>
         </p>
       
 

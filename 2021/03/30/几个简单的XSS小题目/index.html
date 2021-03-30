@@ -6,15 +6,38 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>Archives: 2021/1 | Hexo</title>
+  <title>几个简单的XSS小题目 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/archives/2021/01/index.html">
+  <meta name="description" content="XSS (Cross Site Scripting)&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;先扯点题外话，抱歉这么久都没怎么打理这个博客，之前一直被学校的事情弄得焦头烂额，在明确自己又错过一个学期的情况后，倒也长舒一口气，专心实习搬砖，利用工作之余的时间学习更多的东西。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;XSS的缩写其实是Cross Site Scripting，但是为了防止跟">
+<meta property="og:type" content="article">
+<meta property="og:title" content="几个简单的XSS小题目">
+<meta property="og:url" content="http://example.com/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="XSS (Cross Site Scripting)&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;先扯点题外话，抱歉这么久都没怎么打理这个博客，之前一直被学校的事情弄得焦头烂额，在明确自己又错过一个学期的情况后，倒也长舒一口气，专心实习搬砖，利用工作之余的时间学习更多的东西。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;XSS的缩写其实是Cross Site Scripting，但是为了防止跟">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/waf1.jpg">
+<meta property="og:image" content="http://example.com/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/waf2.jpg">
+<meta property="og:image" content="http://example.com/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/games.jpg">
+<meta property="og:image" content="http://example.com/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game1.jpg">
+<meta property="og:image" content="http://example.com/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game1-2.jpg">
+<meta property="og:image" content="http://example.com/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game2-1.jpg">
+<meta property="og:image" content="http://example.com/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game2-2.jpg">
+<meta property="og:image" content="http://example.com/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game2-3.jpg">
+<meta property="og:image" content="http://example.com/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game2-4.jpg">
+<meta property="og:image" content="http://example.com/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game2-5.jpg">
+<meta property="og:image" content="http://example.com/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game2-6.jpg">
+<meta property="og:image" content="http://example.com/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game3-1.jpg">
+<meta property="og:image" content="http://example.com/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game3-2.jpg">
+<meta property="og:image" content="http://example.com/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game3-3.jpg">
+<meta property="og:image" content="http://example.com/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game4-1.jpg">
+<meta property="og:image" content="http://example.com/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game5-1.jpg">
+<meta property="og:image" content="http://example.com/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game5-2.jpg">
+<meta property="og:image" content="http://example.com/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game5-3.jpg">
+<meta property="article:published_time" content="2021-03-30T09:34:09.000Z">
+<meta property="article:modified_time" content="2021-03-30T08:04:07.185Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/waf1.jpg">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -150,76 +173,176 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-几个简单的XSS小题目" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2021" class="archive-year">2021</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/01/16/2020%E5%B9%B4%E8%87%B32021%E5%B9%B4%E7%9A%84%E5%BF%83%E8%B7%AF%E5%8E%86%E7%A8%8B/" class="archive-article-date">
-  	<time datetime="2021-01-16T09:34:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-16</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/01/16/2020%E5%B9%B4%E8%87%B32021%E5%B9%B4%E7%9A%84%E5%BF%83%E8%B7%AF%E5%8E%86%E7%A8%8B/">2020年至2021年的心路历程</a>
+    <h1 class="article-title" itemprop="name">
+      几个简单的XSS小题目
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/01/16/%E5%A6%82%E4%BD%95%E6%90%AD%E5%BB%BADVWA%E9%9D%B6%E5%9C%BA-1/" class="archive-article-date">
-  	<time datetime="2021-01-16T09:34:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-16</time>
+        
+        <a href="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/" class="archive-article-date">
+  	<time datetime="2021-03-30T09:34:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-03-30</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/01/16/%E5%A6%82%E4%BD%95%E6%90%AD%E5%BB%BADVWA%E9%9D%B6%E5%9C%BA-1/">如何搭建DVWA靶场</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id><a href="#" class="headerlink" title></a></h1><h2 id="XSS-Cross-Site-Scripting"><a href="#XSS-Cross-Site-Scripting" class="headerlink" title="XSS (Cross Site Scripting)"></a>XSS (Cross Site Scripting)</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;先扯点题外话，抱歉这么久都没怎么打理这个博客，之前一直被学校的事情弄得焦头烂额，在明确自己又错过一个学期的情况后，倒也长舒一口气，专心实习搬砖，利用工作之余的时间学习更多的东西。<br>&nbsp;&nbsp;&nbsp;&nbsp;XSS的缩写其实是Cross Site Scripting，但是为了防止跟CSS Cascading Style Sheets混淆，就改成了XSS。什么是XSS呢？即是一种网站应用程序的安全漏洞攻击，它允许恶意用户将代码注入到网页上，其他用户在浏览的时候就会受到一些影响。我个人其实比较喜欢寻找有关XSS的漏洞，其实对我来说就是特别享受弹窗出现的那一刻，最直接的反馈，当然了，我也还在还在不断学习寻找XSS漏洞的很多方式，现在大部分网站的防火墙会很快的阻止你触发这个XSS漏洞，当你在输入像<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>,<code>&quot;&gt;&lt;img src onerror=alert(1)&gt;</code>时，网站都会自动过滤掉像&lt;&gt;,/ 这种符号，然后就切换到触发风控的页面当中。现在比较多的企业都将服务器部署在阿里云等云上，基本上都会触发风控，加上如今前端工程师在开发网页的时候也会将输入的内容进行过滤。<br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/waf1.jpg"><br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/waf2.jpg"></p>
+<p>话不多说，先完成几个比较简单的XSS题目。（靶场由蚁景网安学院提供）<br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/games.jpg"></p>
+<p>可以看到有不同的题目，对应的题目也算是提示和思路。</p>
+<p>先来到第一题：<br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game1.jpg"></p>
+<p>我们可以先直接在url最后添加<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>去看看有什么反应<br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game1-2.jpg"><br>可以看到我们输入的<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>被直接执行了，拿到这道题的flag。</p>
+<p>第二题：input标签闭合<br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game2-1.jpg"></p>
+<p>可以看到这次换了个形式让我们去测试XSS，在日常挖洞的情况中，基本上收集了各大公司的子域名之后，不同的子域名里面就存在着很多的搜索框，像XSS的测试方式之一就是见框就插入payload进行测试，当我们正常输入<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>的时候可以看到/和（）都被过滤掉了。<br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game2-2.jpg"></p>
+<p>这个时候就更换一下思路像题目说的那样去闭合掉input标签，先查看一下源代码，可以看到input标签内的value并没有被闭合掉<br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game2-3.jpg"></p>
+<p>我们尝试将它闭合一下<br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game2-4.jpg"></p>
+<p>可以看到闭合之后就触发了alert，拿到这道题的flag<br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game2-5.jpg"></p>
+<p>再看一下源代码更清晰一些<br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game2-6.jpg"></p>
+<p>第三题：单引号前后闭合与onclick的使用</p>
+<p>当我根据题目所提示的去闭合输入payload发现怎么闭合都是不行，然后查看了一下源代码以及url发现都被过滤掉了<br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game3-1.jpg"><br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game3-2.jpg"></p>
+<p>无论我怎么闭合都不行，换个思路试试直接闭合单引号并直接加上onclick事件的payload看看，这里需要注意输入完成后需要再打几个空格，最后再点击一下输入框就触发了。<br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game3-3.jpg"></p>
+<p>第四题：双引号前后闭合与onclick的使用</p>
+<p>其实思路和第三题差不多，就换成双引号去闭合就好了<br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game4-1.jpg"></p>
+<p>第五题：input标签的闭合与a标签的使用</p>
+<p><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game5-1.jpg"><br>当我以普通的方式闭合并且填写XSSpayload的时候，可以看到script标签内被过滤掉了，所以我们根据题目去换个思路填写利用别的标签事件去填写payload。<br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game5-2.jpg"></p>
+<p>如图所示，我们闭合之后再填写<code>&lt;a href=javascript:alert(1)&gt;</code>，再点击后面出现的链接框就能得到这道题的flag。<br><img src="/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/game5-3.jpg"></p>
+<p>今天先写这几个，我有时候真的很懒，扯一扯题外话，有些时候真的有点想放弃的想法，但是当你偶尔有反馈的时候，还是能让你不断坚持下去，生活中的很多事物都能让人泄气，一个搞不懂的知识点，一个怎么都想不出来的答案，或许那一瞬间没有反馈的时候可以停一停休息一下，或许回过头来问题就能解决了呢？加油，为了能够不犹豫地点一份四五十块以上的外卖而努力。</p>
+<p>（温馨提示：漏洞挖掘需要研读各大厂商的漏洞处理公告，切勿做越界行为，遵纪守法。）</p>
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2021/03/30/%E5%87%A0%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84XSS%E5%B0%8F%E9%A2%98%E7%9B%AE/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2021/01/16/2020%E5%B9%B4%E8%87%B32021%E5%B9%B4%E7%9A%84%E5%BF%83%E8%B7%AF%E5%8E%86%E7%A8%8B/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">2020年至2021年的心路历程</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -242,8 +365,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
